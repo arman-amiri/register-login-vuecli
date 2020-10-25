@@ -2,7 +2,7 @@ import axios from 'axios';
 import router from './router';
 
 
-let serverURL = 'http://localhost/laravelyar/public/';
+let serverURL = 'http://localhost/laravel-api-register-login/public/';
 
 const instance = axios.create({
 

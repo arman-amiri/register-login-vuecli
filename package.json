@@ -13,7 +13,9 @@
     "sass": "^1.27.0",
     "sass-loader": "^10.0.4",
     "vue": "^2.6.11",
-    "vue-router": "^3.4.7"
+    "vue-button-spinner": "^2.2.1",
+    "vue-router": "^3.4.7",
+    "vue-toasted": "^1.1.28"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
