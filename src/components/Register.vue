@@ -3,9 +3,9 @@
 		<input type="text" class="item rtl" name="name" placeholder="نام" v-model="form.name">
 		<input type="text" class="item rtl" name="family" placeholder="نام خانوادگی" v-model="form.family">
 		<input type="text" class="item ltr" name="email" placeholder="ایمیل" v-model="form.email">
-		<input type="text" class="item ltr" name="password" placeholder="گذرواژه" v-model="form.password">
-		<input type="text" class="item ltr" name="passwordConfirm" placeholder="تکرار گذرواژه" v-model="form.passwordConfirm">
-		<button  class="btn " @click="register" v-if="isSubmitted === false">ثبت نام</button>
+		<input type="password" class="item ltr" name="password" placeholder="گذرواژه فقط شامل حروف بزرگ و کوچک(انگلیسی) و عدد" v-model="form.password">
+		<input type="password" class="item ltr"  name="passwordConfirm" placeholder="تکرار گذرواژه" v-model="form.passwordConfirm">
+		<button class="btn " @click="register" v-if="isSubmitted === false">ثبت نام</button>
 
 		<button-spinner v-if="isSubmitted === true"
 				class="btn"
@@ -18,10 +18,12 @@
 </template>
 
 <script>
-	import server from '../server'
+	import server
+		from '../server';
 
 	import ButtonSpinner
 		from 'vue-button-spinner';
+
 
 	export default {
 		name: 'Register',
@@ -34,13 +36,13 @@
 		data()
 		{
 			return {
-				form:{
-				name: "",
-				family: "",
-				email: "",
-				password: "",
-				passwordConfirm: "",
-			},
+				form: {
+					name: "",
+					family: "",
+					email: "",
+					password: "",
+					passwordConfirm: "",
+				},
 				errors: {},
 				info: '',
 				arman1: '',
@@ -50,7 +52,7 @@
 				status: ''
 			};
 		},
-		methods:{
+		methods: {
 			register()
 			{
 				const vm = this;
@@ -85,25 +87,38 @@
 					)
 					.catch(err =>
 					{
-
-						if (err.response.data.errors.email)
+						vm.isSubmitted = false;
+						if (err.response.status === 422)
 						{
-							vm.$toasted.show(err.response.data.errors.email[0], {
-								position: 'bottom-right',
-								type: 'error',
-								closeOnSwipe: true,
-								duration: 5000,
-							});
+							if (err.response.data.errors.email)
+							{
+								vm.$toasted.show(err.response.data.errors.email[0], {
+									position: 'bottom-right',
+									type: 'error',
+									closeOnSwipe: true,
+									duration: 5000,
+								});
+							}
+							if (err.response.data.errors.password)
+							{
+								vm.$toasted.show(err.response.data.errors.password[0], {
+									position: 'bottom-right',
+									type: 'error',
+									closeOnSwipe: true,
+									duration: 5200,
+								});
+							}
 						}
-						if (err.response.data.errors.password)
+						if (err.response.status !== 422)
 						{
-							vm.$toasted.show(err.response.data.errors.password[0], {
+							vm.$toasted.show('خطایی رخ داده است', {
 								position: 'bottom-right',
-								type: 'error',
+								type: 'info',
 								closeOnSwipe: true,
 								duration: 5200,
 							});
 						}
+
 						vm.errors      = err.response.data.errors;
 						vm.isSubmitted = false;
 						vm.isSent      = false;

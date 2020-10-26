@@ -7,7 +7,7 @@
 			<div class="items">
 				<input type="text" class="item rtl" name="code" placeholder="کد ارسال شده به ایمیل شما" v-model="form.code">
 
-				<button  class="btn " @click="register" v-if="isSubmitted === false">ثبت نام</button>
+				<button class="btn " @click="register" v-if="isSubmitted === false">ثبت نام</button>
 				<button-spinner v-if="isSubmitted === true"
 						class="btn"
 						:isLoading="isSubmitted && !isSent"
@@ -26,7 +26,9 @@
 	import ButtonSpinner
 		from 'vue-button-spinner';
 
-	import server from '../server'
+	import server
+		from '../server';
+
 
 	export default {
 		components: {
@@ -56,18 +58,18 @@
 
 			register()
 			{
-				const vm = this;
+				const vm       = this;
 				vm.isSubmitted = true;
 				server.post('/confirmRegister', this.form)
 					.then(res =>
 						{
-							if (res.data.status === 'OK')
+							if (res.status === 200)
 							{
-								localStorage.setItem('token', res.body.token);
+								localStorage.setItem('token', res.data.token);
 								localStorage.removeItem('email');
-								vm.$root.user = res.body.user;
-								// vm.$store.state.token = res.body.token;
-								// res.body.token = setToken;
+								vm.$root.user = res.data.user;
+								// vm.$store.state.token = res.response.body.token;
+								// res.response.body.token = setToken;
 
 
 								vm.$toasted.show('عملیات ثبت نام موفقیت آمیز بود', {
@@ -78,7 +80,7 @@
 									onComplete: function()
 									{
 										vm.$router.push({
-											name: '',
+											path: '/',
 										});
 									}
 								});
@@ -86,9 +88,9 @@
 
 						}, err =>
 						{
-							if (err.data.errors.code)
+							if (err.response.data.errors.code)
 							{
-								vm.$toasted.show(err.data.errors.code[0], {
+								vm.$toasted.show(err.response.data.errors.code[0], {
 									position: 'bottom-right',
 									type: 'error',
 									closeOnSwipe: true,
@@ -96,7 +98,6 @@
 								});
 							}
 						}
-
 					);
 				vm.isSubmitted = false;
 			}
@@ -129,6 +130,7 @@
 		}
 
 	}
+
 	.items
 	{
 		display: flex;

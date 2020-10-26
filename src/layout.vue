@@ -2,19 +2,31 @@
 	<div class="body">
 		<div class="header">
 			<div class="nav">
-				<router-link to="/register">ثبت نام</router-link>
-				<router-link to="/login">ورود</router-link>
-				<router-link to="/exit">خروج</router-link>
+				<router-link to="/register" v-if="$root.user === null">ثبت نام</router-link>
+				<router-link to="/login" v-if="$root.user === null">ورود</router-link>
+				<router-link to="/exit" v-if="$root.user">
+					<span @click="exit">خروج</span>
+				</router-link>
 			</div>
+			<div v-if="$root.user !== null">
+				{{$root.user.name ? $root.user.name : 'کاربر گرامی'}}
+				خوش آمدی
+			</div>
+			<router-link to="/">
 			<div class="logo"></div>
+			</router-link>
 		</div>
 		<div class="container">
 			<router-view :key="$route.path"/>
+
 		</div>
 	</div>
 </template>
 
 <script>
+	import server
+		from './server';
+
 
 	export default {
 		name: 'layout',
@@ -23,7 +35,32 @@
 			return {};
 		},
 
-		methods: {},
+		methods: {
+			exit()
+			{
+				let vm = this;
+				server.get('exit')
+					.then(res =>
+					{
+						vm.$root.user = null;
+						localStorage.removeItem('token');
+						if (res)
+						{
+							vm.$router.push({
+								path: '/register',
+							});
+						}
+
+					})
+					.catch(err =>
+					{
+						if (err)
+						{
+							alert('خطایی رخ  داده است');
+						}
+					});
+			}
+		},
 
 
 	};
@@ -55,7 +92,9 @@
 				margin: auto 15px;
 				text-decoration: none;
 			}
-			.active{
+
+			.active
+			{
 				border: 3px solid #FF6154;
 			}
 		}
@@ -76,8 +115,8 @@
 		max-width: 800px;
 		margin: auto;
 		margin-top: 50px;
-		background-color: #e9967a29;
-		z-index: 1000;
+		background-color: #E9967A29;
+		z-index: 1000!important;
 		border-radius: 20px 0 20px 0;
 	}
 

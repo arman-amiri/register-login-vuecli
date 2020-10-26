@@ -2,7 +2,8 @@ import axios from 'axios';
 import router from './router';
 
 
-let serverURL = 'http://localhost/laravel-api-register-login/public/';
+// let serverURL = 'http://localhost/laravel-api-register-login/public/';
+let serverURL = 'http://delara.qlake.ir/public/';
 
 const instance = axios.create({
 
