@@ -18,35 +18,33 @@ const routes = [
 		children: [
 
 			{
-				path: '/register',
+				path: 'register',
 				name: 'register',
 				component: Register,
 			},
 			{
-				path: '/login',
+				path: 'login',
 				name: 'login',
 				component: Login,
 			},
 			{
-				path: '/exit',
+				path: 'exit',
 				name: 'exit',
 				component: Exit,
 			},
 			{
-				path: '/confirmRegister',
+				path: 'confirmRegister',
 				name: 'confirmRegister',
 				component: ConfimPassword,
 			},
 		]
-
-
 	}
 ];
 
 
 const router = new VueRouter({
 	mode: 'history',
-	// base: process.env.BASE_URL,
+	base: process.env.BASE_URL || "/",
 	routes
 });
 
